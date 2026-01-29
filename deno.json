@@ -1,0 +1,12 @@
+{
+  "nodeModulesDir": "auto",
+  "imports": {
+    "@commitlint/cli": "npm:@commitlint/cli@^20.3.1",
+    "@commitlint/config-conventional": "npm:@commitlint/config-conventional@^20.3.1",
+    "husky": "npm:husky@^9.1.7"
+  },
+  "tasks": {
+    "prepare": "deno install && deno run -A npm:husky",
+    "commitlint": "deno run -A npm:@commitlint/cli --edit"
+  }
+}
