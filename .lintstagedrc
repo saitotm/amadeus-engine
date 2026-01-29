@@ -1,0 +1,9 @@
+{                                           
+  "*.{ts,tsx,js,jsx}": [
+    "deno fmt",
+    "deno lint"
+  ],
+  "*.json": [
+    "deno fmt"
+  ],
+}

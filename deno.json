@@ -3,10 +3,12 @@
   "imports": {
     "@commitlint/cli": "npm:@commitlint/cli@^20.3.1",
     "@commitlint/config-conventional": "npm:@commitlint/config-conventional@^20.3.1",
-    "husky": "npm:husky@^9.1.7"
+    "husky": "npm:husky@^9.1.7",
+    "lint-staged": "npm:lint-staged@^16.2.7"
   },
   "tasks": {
     "prepare": "deno install && deno run -A npm:husky",
-    "commitlint": "deno run -A npm:@commitlint/cli --edit"
+    "commitlint": "deno run -A npm:@commitlint/cli --edit",
+    "lint-staged": "deno run -A npm:lint-staged"
   }
 }
