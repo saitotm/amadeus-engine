@@ -89,4 +89,56 @@ Deno.test("findFinalAnswer - FINAL detection", async (t) => {
     const result = findFinalAnswer(text);
     assertEquals(result, "calculate(1 + 2)");
   });
+
+  await t.step("detects FINAL_VAR with double quoted variable name", () => {
+    const text = 'FINAL_VAR("result")';
+    const environment = { result: "The answer is 42" };
+    const result = findFinalAnswer(text, environment);
+    assertEquals(result, "The answer is 42");
+  });
+
+  await t.step("detects FINAL_VAR with single quoted variable name", () => {
+    const text = "FINAL_VAR('answer')";
+    const environment = { answer: "Hello World" };
+    const result = findFinalAnswer(text, environment);
+    assertEquals(result, "Hello World");
+  });
+
+  await t.step("detects FINAL_VAR with unquoted variable name", () => {
+    const text = "FINAL_VAR(myVar)";
+    const environment = { myVar: "test value" };
+    const result = findFinalAnswer(text, environment);
+    assertEquals(result, "test value");
+  });
+
+  await t.step(
+    "returns undefined when variable not found in environment",
+    () => {
+      const text = 'FINAL_VAR("nonexistent")';
+      const environment = { other: "value" };
+      const result = findFinalAnswer(text, environment);
+      assertEquals(result, undefined);
+    },
+  );
+
+  await t.step("handles FINAL_VAR with number value", () => {
+    const text = "FINAL_VAR(count)";
+    const environment = { count: 123 };
+    const result = findFinalAnswer(text, environment);
+    assertEquals(result, "123");
+  });
+
+  await t.step("handles FINAL_VAR with array value", () => {
+    const text = "FINAL_VAR(items)";
+    const environment = { items: [1, 2, 3] };
+    const result = findFinalAnswer(text, environment);
+    assertEquals(result, "[1,2,3]");
+  });
+
+  await t.step("handles FINAL_VAR with object value", () => {
+    const text = "FINAL_VAR(data)";
+    const environment = { data: { key: "value" } };
+    const result = findFinalAnswer(text, environment);
+    assertEquals(result, '{"key":"value"}');
+  });
 });

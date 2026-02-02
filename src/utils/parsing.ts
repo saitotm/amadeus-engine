@@ -17,7 +17,7 @@ export function findCodeBlocks(text: string): string[] {
 }
 
 /**
- * Detects FINAL() pattern in text and extracts its value.
+ * Detects FINAL() or FINAL_VAR() pattern in text and extracts its value.
  *
  * @param text - Text to search for FINAL pattern
  * @param environment - Optional variable context for FINAL_VAR resolution
@@ -25,8 +25,26 @@ export function findCodeBlocks(text: string): string[] {
  */
 export function findFinalAnswer(
   text: string,
-  _environment?: Record<string, unknown>,
+  environment?: Record<string, unknown>,
 ): string | undefined {
+  // Check for FINAL_VAR pattern first (takes precedence)
+  const finalVarMatch = text.match(/FINAL_VAR\(([^)]+)\)/);
+  if (finalVarMatch) {
+    // removing quotes if present
+    const varName = finalVarMatch[1].trim().replace(/^["']|["']$/g, "");
+
+    if (!environment || !(varName in environment)) {
+      return undefined;
+    }
+
+    // Convert value to string representation
+    const value = environment[varName];
+    if (typeof value === "string") {
+      return value;
+    }
+    return JSON.stringify(value);
+  }
+
   // Match FINAL with double quotes
   const doubleQuoteMatch = text.match(/FINAL\("([^"]*)"\)/);
   if (doubleQuoteMatch) {
