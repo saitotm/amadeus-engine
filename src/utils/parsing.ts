@@ -1,4 +1,11 @@
 /**
+ * Parsing utilities for extracting code blocks and detecting
+ * final answer patterns from LLM responses.
+ *
+ * @module
+ */
+
+/**
  * Extracts executable code blocks from LLM response.
  *
  * @param text - LLM response text
